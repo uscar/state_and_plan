@@ -7,33 +7,21 @@
 
 //MAIN TODOS
 //Finish collision detection engine
-//Check the collision state logic and add a method for states to ask each other whether they need to add a collision
-//(separate from the collision engine)
-//keep collision engine general enough to be able to handle quad
-//add timeout state and randomnoise state, as well as timeout and randomnoise clocks
-//double check state logic
-//find a way to check for de-collisions
+//Finish changing deletion re-inits to requeue
+//add default states, and update the internal clocks appropriately
+//finish de-collision detection
+//readd collision cancellation on NAN input
 //make sure to add a little delay in the stickbots before transitioning from stopped to moving
-//transfer const values
-//collision engine make sure tests height of thing it'd run into (can use knowledge of it being a roomba)
-//finish initializing quad and quad states
+//add roomba height constant
 //link to eigen
-//add other state specific values to roomba box
 //find safe landing areas
-//add standard collision check
-//change it so deleted things re-add parents to queue instead of reinitialize because that feels a lot cleaner
+//add flight logic
 
 
-//maybe add something to malloc tons of memory beforehand like an array of roomba states/state value container,
+//TODO: later
+//add something to malloc tons of memory beforehand like an array of roomba states/state value container,
 //and then just keep malloc-ing more of those
-
-
-//maybe delete sufficiently old memories? we don't need to know that far into the past. It would make everything more general
-//find ways of combining sims to keep value relevant, or allow for a 
-//certain degree of flexibility in order to keep things reasonable
-//flexibility will also allow for errors to occur in system
-//allow for arbitrary changes, don't try to predict everything
-
+//delete sufficiently old memories to keep container in check; we don't need to know that far into the past. 
 
 //for mem management:
 //keep 2 arrays, same size, one of datamembers and one of unsigned shorts
@@ -49,7 +37,14 @@
 //on destruction, put ID bac
 //delete history past x seconds
 
-//idea: add 'diversifier', basically takes old states and tries to find new paths up to current observations to diversify filter
+
+//Other ideas
+//find ways of combining sims to keep value relevant, or allow for a 
+//certain degree of flexibility in order to keep things reasonable
+//flexibility will also allow for errors to occur in system
+//allow for arbitrary changes, don't try to predict everything
+
+//add 'diversifier', basically takes old states and tries to find new paths up to current observations to diversify filter
 //would be fairly low memory but potentially expensive processing-wise
 
 
@@ -67,15 +62,9 @@
 
 
 
+//TODO: remove some of abundant error checks as code matures to streamline it (or make them macro flagged)
 
-
-
-
-
-
-//TODO: remove abundant error checks as code matures to streamline it?
-
-//a lot of this code is kind of poorly encapsulated, but it's readable and functional so
+//some of this code is kind of poorly encapsulated, but it's readable and functional so
 #define _USE_MATH_DEFINES
 #include <memory>
 #include <vector>
@@ -86,10 +75,6 @@
 #include <cmath>
 #include <queue>
 #include <iostream>
-
-//I really hate cast syntax.
-//#define cast(type,name) ((type)name)
-//#define cast(type,name) reinterpret_cast<type>(name)
 
 
 //generic vector math implementation that took like ~20 mins to write
@@ -249,7 +234,7 @@ namespace plannerlib {
 		NumStates //for utility, always at end
 	};
 
-	//##define constant members##
+	//##define constants##
 
 
 	//roomba software behavior parameters
@@ -409,7 +394,7 @@ namespace plannerlib {
 	//---------------------------------------------------------------------ROBOT
 	class robot {
 
-	friend class robotState;
+	friend class robotState; //first time actually using class friendship in real code
 
 	public:
 
