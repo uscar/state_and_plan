@@ -4,6 +4,7 @@
 
 #include <thread>
 #include <chrono>
+#include <ctime>
 
 class Timer
 {
@@ -29,9 +30,17 @@ public:
 
     void setTimeout(const Timeout &timeout);
     const Timeout &timeout() const;
+    
+    unsigned long getTime();
+    
+    unsigned long getCycleTime();
+    
+    
 
 private:
     std::thread _thread;
+    
+    unsigned long begTime;
 
     bool _running = false;
     bool _isSingleShot = true;

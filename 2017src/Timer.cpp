@@ -20,6 +20,8 @@ void Timer::start(bool multiThread)
         return;
 
     _running = true;
+    
+    begTime = clock();
 
     if (multiThread == true) {
         _thread = std::thread(
@@ -99,3 +101,11 @@ void Timer::_sleepThenTimeout()
     if (this->running() == true)
         this->timeout()();
 }
+
+unsigned long Timer::getTime(){
+  return ((unsigned long)clock()-begTime)*1000/CLOCKS_PER_SEC;
+}
+
+unsigned long Timer::getCycleTime(){
+  return getTime() % 20000;
+  }
