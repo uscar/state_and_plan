@@ -6,6 +6,7 @@
 class Roomba: public Robot
 {
  public:
-  tuple<double x, double y, double z, long theta> simulate(double time);
+	 Roomba(double x, double y, double z, double dir);
+  std::tuple<double, double, double, long> simulate(double time);
   const double speed = 0.33;
 };
