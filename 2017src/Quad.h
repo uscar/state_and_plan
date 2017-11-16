@@ -6,6 +6,7 @@ class Quad: public Robot
 {
 public:
 	Quad(double x, double y, double z, double dir);
+	void land();
 	void lookaround();
 	void rotate(double rad);
 	void move(double distance);
