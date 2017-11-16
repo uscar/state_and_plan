@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include <iostream>
 
 Timer::Timer(const Timeout &timeout)
     : _timeout(timeout)
@@ -22,6 +23,8 @@ void Timer::start(bool multiThread)
     _running = true;
     
     begTime = clock();
+    
+    std::cout << begTime << std::endl;
 
     if (multiThread == true) {
         _thread = std::thread(
@@ -102,10 +105,21 @@ void Timer::_sleepThenTimeout()
         this->timeout()();
 }
 
-unsigned long Timer::getTime(){
+unsigned long Timer::getTime_helper(){
   return ((unsigned long)clock()-begTime)*1000/CLOCKS_PER_SEC;
 }
 
-unsigned long Timer::getCycleTime(){
-  return getTime() % 20000;
-  }
+unsigned long Timer::getCycleTime_helper(){
+  return getTime_helper() % 20000;
+}
+
+double Timer::getTime()
+{
+  return (getTime_helper() * 1.0) / 1000;
+}
+
+double Timer::getCycleTime(){
+  return (getCycleTime_helper() * 1.0) / 1000;
+}
+  
+  

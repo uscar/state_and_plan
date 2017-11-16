@@ -9,8 +9,12 @@
 class Timer
 {
 public:
+  
+    
     typedef std::chrono::milliseconds Interval;
     typedef std::function<void(void)> Timeout;
+    
+    int count = 0;
 
     Timer(const Timeout &timeout);
     Timer(const Timeout &timeout,
@@ -31,9 +35,14 @@ public:
     void setTimeout(const Timeout &timeout);
     const Timeout &timeout() const;
     
-    unsigned long getTime();
+    double getTime();
     
-    unsigned long getCycleTime();
+    double getCycleTime();
+
+    unsigned long getTime_helper();
+        
+    unsigned long getCycleTime_helper();
+     
     
     
 
@@ -50,6 +59,8 @@ private:
 
     void _temporize();
     void _sleepThenTimeout();
+    
+    
 };
 
 #endif // TIMER_H
