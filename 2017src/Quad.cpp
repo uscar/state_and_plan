@@ -33,3 +33,7 @@ void Quad::shortHop(){
 void Quad::evade(){
 
 }
+
+void Quad::land(){
+	
+}
