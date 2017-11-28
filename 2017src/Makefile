@@ -5,7 +5,7 @@ all: clean timerTest
 
 
 timerTest: timerTest.cpp Timer.o 
-	$(CPPFLAGS) $< Timer.o -o timerTest
+	$(CPPFLAGS) $< -pthread Timer.o -o timerTest
 
 
 
